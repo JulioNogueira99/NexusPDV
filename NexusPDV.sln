@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusPDV.Infrastructure", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusPDV.API", "NexusPDV.API\NexusPDV.API.csproj", "{A6DD4DC5-9216-4430-B08B-7D189762E3C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NexusPDV.Tests", "NexusPDV.Tests\NexusPDV.Tests.csproj", "{3472FA98-697F-48FC-BA51-C7F86E38729D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{A6DD4DC5-9216-4430-B08B-7D189762E3C7}.Release|x64.Build.0 = Release|Any CPU
 		{A6DD4DC5-9216-4430-B08B-7D189762E3C7}.Release|x86.ActiveCfg = Release|Any CPU
 		{A6DD4DC5-9216-4430-B08B-7D189762E3C7}.Release|x86.Build.0 = Release|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Debug|x64.Build.0 = Debug|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Debug|x86.Build.0 = Debug|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Release|x64.ActiveCfg = Release|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Release|x64.Build.0 = Release|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Release|x86.ActiveCfg = Release|Any CPU
+		{3472FA98-697F-48FC-BA51-C7F86E38729D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
