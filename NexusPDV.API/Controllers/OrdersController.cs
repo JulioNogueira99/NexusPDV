@@ -3,6 +3,7 @@ using NexusPDV.Application.InputModels;
 using NexusPDV.Application.Services;
 using System;
 using System.Threading.Tasks;
+using FluentValidation;
 
 namespace NexusPDV.API.Controllers
 {
@@ -11,17 +12,25 @@ namespace NexusPDV.API.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _service;
+        private readonly IValidator<PlaceOrderInputModel> _validator;
 
-        public OrdersController(IOrderService service)
+        public OrdersController(IOrderService service, IValidator<PlaceOrderInputModel> validator)
         {
             _service = service;
+            _validator = validator;
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(PlaceOrderInputModel input)
         {
-            try
+            var validationResult = await _validator.ValidateAsync(input);
+            if (!validationResult.IsValid)
             {
+                return BadRequest(new { errors = validationResult.Errors });
+            }
+
+            try
+            { 
                 var order = await _service.PlaceOrder(input);
 
                 return CreatedAtAction(nameof(Post), new { id = order.OrderId }, order);

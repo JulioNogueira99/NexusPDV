@@ -4,6 +4,8 @@ using NexusPDV.Application.Services;
 using NexusPDV.Domain.Interfaces;
 using NexusPDV.Infrastructure.Context;
 using NexusPDV.Infrastructure.Repositories;
+using FluentValidation; 
+using NexusPDV.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+
+builder.Services.AddValidatorsFromAssemblyContaining<PlaceOrderValidator>();
 
 builder.Services.AddControllers();
 
