@@ -5,5 +5,6 @@ namespace NexusPDV.Domain.Interfaces
     public interface IOrderRepository
     {
         void Add(Order order);
+        Task<Order> GetByIdAsync(int id);
     }
 }

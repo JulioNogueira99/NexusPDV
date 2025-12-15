@@ -48,5 +48,18 @@ namespace NexusPDV.API.Controllers
                 return StatusCode(500, new { message = "Ocorreu um erro interno: " + ex.Message });
             }
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var order = await _service.GetById(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(order);
+        }
     }
 }

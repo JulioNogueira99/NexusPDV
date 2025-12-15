@@ -1,4 +1,5 @@
-﻿using NexusPDV.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using NexusPDV.Domain.Entities;
 using NexusPDV.Domain.Interfaces;
 using NexusPDV.Infrastructure.Context;
 
@@ -16,6 +17,14 @@ namespace NexusPDV.Infrastructure.Repositories
         public void Add(Order order)
         {
             _context.Orders.Add(order);
+        }
+
+        public async Task<Order> GetByIdAsync(int id)
+        {
+            return await _context.Orders
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
         }
     }
 }
