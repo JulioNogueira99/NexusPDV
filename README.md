@@ -1,108 +1,116 @@
-🛒 NexusPDV
-Uma API robusta para gestão de Ponto de Venda (PDV), focada em integridade transacional, arquitetura desacoplada e segurança.
+# 🛒 NexusPDV
 
-📖 Sobre o Projeto
-O NexusPDV é um backend desenvolvido em .NET 9 para gerenciar vendas de um mini-mercado. O diferencial deste projeto não é apenas "fazer um CRUD", mas sim garantir a consistência de dados em operações complexas e a segurança de acesso.
+> Uma API robusta para gestão de Ponto de Venda (PDV), focada em integridade transacional, arquitetura desacoplada e segurança.
 
-Utiliza o padrão Unit of Work para assegurar que um Pedido só seja gerado se houver baixa de estoque bem-sucedida (transação atômica) e protege suas operações críticas através de Autenticação JWT.
+![Net](https://img.shields.io/badge/.NET%209-512BD4?style=flat&logo=dotnet&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat&logo=docker&logoColor=white)
+![EF Core](https://img.shields.io/badge/EF%20Core-512BD4?style=flat&logo=dotnet&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=flat&logo=json-web-tokens&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-blue)
 
-🚀 Tecnologias & Práticas
-Language: C# (.NET 9)
+## 📖 Sobre o Projeto
 
-Framework: ASP.NET Core Web API
+O **NexusPDV** é um backend desenvolvido em .NET 9 para gerenciar vendas de um mini-mercado. 
+O diferencial deste projeto não é apenas "fazer um CRUD", mas sim garantir a **consistência de dados** em operações complexas e a **segurança** de acesso.
 
-Container: Docker & Docker Compose
+Utiliza o padrão **Unit of Work** para assegurar que um Pedido só seja gerado se houver baixa de estoque bem-sucedida (transação atômica) e protege suas operações críticas através de **Autenticação JWT**.
 
-Security: JWT (JSON Web Tokens) & ASP.NET Core Identity
+## 🚀 Tecnologias & Práticas
 
-ORM: Entity Framework Core (SQL Server)
+* **Language:** C# (.NET 9)
+* **Framework:** ASP.NET Core Web API
+* **Container:** Docker & Docker Compose
+* **Security:** JWT (JSON Web Tokens) & ASP.NET Core Identity
+* **ORM:** Entity Framework Core (SQL Server)
+* **Architecture:** Clean Architecture (Domain, Application, Infrastructure, API)
+* **Design Patterns:** Repository Pattern, Unit of Work, Domain-Driven Design (DDD).
+* **Validation:** FluentValidation
+* **Testing:** xUnit + Moq (Unit Testing)
+* **Documentation:** Swagger UI (Swashbuckle)
 
-Architecture: Clean Architecture (Domain, Application, Infrastructure, API)
+## 🏗️ Arquitetura
 
-Design Patterns: Repository Pattern, Unit of Work, Domain-Driven Design (DDD).
+O projeto segue estritamente a **Clean Architecture** para garantir testabilidade e manutenção:
 
-Validation: FluentValidation
+NexusPDV ├── 📂 NexusPDV.Domain # Entidades, Enums, Interfaces (O Coração / Puro C#) ├── 📂 NexusPDV.Application # Casos de Uso (Services), DTOs, Validações, Auth Logic ├── 📂 NexusPDV.Infrastructure # Banco de Dados (EF Core), Identity, Repositórios └── 📂 NexusPDV.API # Controllers, Configurações JWT, Swagger, Dockerfile
 
-Testing: xUnit + Moq (Unit Testing)
 
-Documentation: Swagger UI (Swashbuckle)
+### Destaques Técnicos
 
-🏗️ Arquitetura
-O projeto segue estritamente a Clean Architecture para garantir testabilidade e manutenção:
+* **Secure by Design:** Rotas críticas (como criar pedidos) exigem autenticação via Token Bearer.
+* **Rich Domain Models:** A lógica de "Baixar Estoque" reside dentro da entidade `Product`, protegendo o estado do objeto.
+* **Transaction Management:** Uso de Unit of Work para garantir atomicidade entre tabelas.
+* **Auto-Migration:** O sistema é capaz de criar o banco de dados e aplicar migrações automaticamente ao iniciar no container.
 
-NexusPDV
-├── 📂 NexusPDV.Domain          # Entidades, Enums, Interfaces (O Coração / Puro C#)
-├── 📂 NexusPDV.Application     # Casos de Uso (Services), DTOs, Validações, Auth Logic
-├── 📂 NexusPDV.Infrastructure  # Banco de Dados (EF Core), Identity, Repositórios
-└── 📂 NexusPDV.API             # Controllers, Configurações JWT, Swagger, Dockerfile
-Destaques Técnicos
-Secure by Design: Rotas críticas (como criar pedidos) exigem autenticação via Token Bearer.
+## 🐳 Como Rodar o Projeto (Docker)
 
-Rich Domain Models: A lógica de "Baixar Estoque" reside dentro da entidade Product, protegendo o estado do objeto.
-
-Transaction Management: Uso de Unit of Work para garantir atomicidade entre tabelas.
-
-Auto-Migration: O sistema é capaz de criar o banco de dados e aplicar migrações automaticamente ao iniciar no container.
-
-🐳 Como Rodar o Projeto (Docker)
 A forma mais simples de rodar a aplicação (API + SQL Server) é utilizando o Docker. Você não precisa ter o .NET SDK ou SQL Server instalados na sua máquina.
 
-Pré-requisitos
-Docker Desktop instalado e rodando.
+### Pré-requisitos
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/) instalado e rodando.
 
-Passo a Passo
-Clone o repositório:
+### Passo a Passo
 
-Bash
+1.  **Clone o repositório:**
+    ```bash
+    git clone https://github.com/JulioNogueira99/NexusPDV.git
+    cd NexusPDV
+    ```
 
-git clone https://github.com/JulioNogueira99/NexusPDV.git
-cd NexusPDV
-Suba o ambiente: Execute o comando abaixo na raiz do projeto. Ele irá compilar a API, baixar o SQL Server e configurar a rede.
+2.  **Suba o ambiente:**
+    Execute o comando abaixo na raiz do projeto. Ele irá compilar a API, baixar o SQL Server e configurar a rede.
+    ```bash
+    docker compose up --build
+    ```
 
-Bash
+3.  **Acesse:**
+    Abra o navegador em: [http://localhost:8080/swagger](http://localhost:8080/swagger)
 
-docker compose up --build
-Acesse: Abra o navegador em: http://localhost:8080/swagger
+> **Nota:** Na primeira execução, o SQL Server pode demorar alguns segundos para iniciar. Se a API falhar ao conectar, ela tentará reiniciar automaticamente até conseguir.
 
-Nota: Na primeira execução, o SQL Server pode demorar alguns segundos para iniciar. Se a API falhar ao conectar, ela tentará reiniciar automaticamente até conseguir.
+---
 
-🔐 Como Acessar (Autenticação)
+## 🔐 Como Acessar (Autenticação)
+
 Como o sistema possui segurança JWT, o fluxo de uso no Swagger segue a ordem abaixo:
 
-Crie seu Usuário: Vá no endpoint POST /api/Auth/register e crie um login.
+1.  **Crie seu Usuário:**
+    Vá no endpoint `POST /api/Auth/register` e crie um login.
+2.  **Faça Login:**
+    Vá no endpoint `POST /api/Auth/login` com os dados criados.
+    *Copie o `token` gerado na resposta.*
+3.  **Autentique-se no Swagger:**
+    Clique no botão **Authorize** 🔓 (cadeado) no topo da página.
+    Digite: `Bearer SEU_TOKEN_AQUI` e clique em Login.
+4.  **Use a API:**
+    Agora você pode acessar as rotas protegidas (como criar vendas).
 
-Faça Login: Vá no endpoint POST /api/Auth/login com os dados criados. Copie o token gerado na resposta.
+---
 
-Autentique-se no Swagger: Clique no botão Authorize 🔓 (cadeado) no topo da página. Digite: Bearer SEU_TOKEN_AQUI e clique em Login.
+## 🔌 Endpoints Principais
 
-Use a API: Agora você pode acessar as rotas protegidas (como criar vendas).
+### 🛡️ Auth (Autenticação)
+* `POST /api/Auth/register` - Cria um novo usuário no sistema.
+* `POST /api/Auth/login` - Retorna o Token JWT de acesso.
 
-🔌 Endpoints Principais
-🛡️ Auth (Autenticação)
-POST /api/Auth/register - Cria um novo usuário no sistema.
+### 🛒 Orders (Vendas)
+* `POST /api/Orders` - **[Requer Auth]** Realiza uma nova venda e baixa estoque.
+    * *Body Exemplo:*
+    ```json
+    {
+      "customerId": 1,
+      "items": [
+        { "productId": 1, "quantity": 1 }
+      ]
+    }
+    ```
+* `GET /api/Orders/{id}` - Consulta um pedido e seus itens.
 
-POST /api/Auth/login - Retorna o Token JWT de acesso.
+## 🧪 Rodando os Testes (Opcional)
 
-🛒 Orders (Vendas)
-POST /api/Orders - [Requer Auth] Realiza uma nova venda e baixa estoque.
-
-Body Exemplo:
-
-JSON
-
-{
-  "customerId": 1,
-  "items": [
-    { "productId": 1, "quantity": 1 }
-  ]
-}
-GET /api/Orders/{id} - Consulta um pedido e seus itens.
-
-🧪 Rodando os Testes (Opcional)
 Se você tiver o .NET SDK instalado e quiser rodar os testes unitários da aplicação:
 
-Bash
-
+```bash
 dotnet test
 🤝 Contribuição
 Contribuições são bem-vindas! Sinta-se à vontade para abrir Issues ou Pull Requests.
