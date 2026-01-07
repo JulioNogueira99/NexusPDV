@@ -1,21 +1,25 @@
 🛒 NexusPDV
-Uma API robusta para gestão de Ponto de Venda (PDV), focada em integridade transacional e arquitetura desacoplada.
+Uma API robusta para gestão de Ponto de Venda (PDV), focada em integridade transacional, arquitetura desacoplada e segurança.
 
 📖 Sobre o Projeto
-O NexusPDV é um backend desenvolvido em .NET 9 para gerenciar vendas de um mini-mercado. 
-O diferencial deste projeto não é apenas "fazer um CRUD", mas sim garantir a consistência de dados em operações complexas. 
-Utiliza o padrão Unit of Work para assegurar que um Pedido só seja gerado se houver baixa de estoque bem-sucedida, tratando a venda como uma transação atômica.
+O NexusPDV é um backend desenvolvido em .NET 9 para gerenciar vendas de um mini-mercado. O diferencial deste projeto não é apenas "fazer um CRUD", mas sim garantir a consistência de dados em operações complexas e a segurança de acesso.
+
+Utiliza o padrão Unit of Work para assegurar que um Pedido só seja gerado se houver baixa de estoque bem-sucedida (transação atômica) e protege suas operações críticas através de Autenticação JWT.
 
 🚀 Tecnologias & Práticas
 Language: C# (.NET 9)
 
 Framework: ASP.NET Core Web API
 
+Container: Docker & Docker Compose
+
+Security: JWT (JSON Web Tokens) & ASP.NET Core Identity
+
 ORM: Entity Framework Core (SQL Server)
 
 Architecture: Clean Architecture (Domain, Application, Infrastructure, API)
 
-Design Patterns: Repository Pattern, Unit of Work, Domain-Driven Design (DDD), Dependency Injection.
+Design Patterns: Repository Pattern, Unit of Work, Domain-Driven Design (DDD).
 
 Validation: FluentValidation
 
@@ -28,21 +32,23 @@ O projeto segue estritamente a Clean Architecture para garantir testabilidade e 
 
 NexusPDV
 ├── 📂 NexusPDV.Domain          # Entidades, Enums, Interfaces (O Coração / Puro C#)
-├── 📂 NexusPDV.Application     # Casos de Uso (Services), DTOs, Validações
-├── 📂 NexusPDV.Infrastructure  # Banco de Dados (EF Core), Repositórios, Mapeamentos
-└── 📂 NexusPDV.API             # Controllers, Configurações, Swagger
+├── 📂 NexusPDV.Application     # Casos de Uso (Services), DTOs, Validações, Auth Logic
+├── 📂 NexusPDV.Infrastructure  # Banco de Dados (EF Core), Identity, Repositórios
+└── 📂 NexusPDV.API             # Controllers, Configurações JWT, Swagger, Dockerfile
 Destaques Técnicos
-Rich Domain Models: As entidades não são anêmicas. A lógica de "Baixar Estoque" reside dentro da entidade Product, protegendo o estado do objeto.
+Secure by Design: Rotas críticas (como criar pedidos) exigem autenticação via Token Bearer.
 
-Transaction Management: Uso de Unit of Work para garantir atomicidade entre tabelas Orders, OrderItems e Products.
+Rich Domain Models: A lógica de "Baixar Estoque" reside dentro da entidade Product, protegendo o estado do objeto.
 
-Fail-Fast Validation: Validação de inputs (via FluentValidation) antes de atingir o banco de dados.
+Transaction Management: Uso de Unit of Work para garantir atomicidade entre tabelas.
 
-⚙️ Como Rodar o Projeto
+Auto-Migration: O sistema é capaz de criar o banco de dados e aplicar migrações automaticamente ao iniciar no container.
+
+🐳 Como Rodar o Projeto (Docker)
+A forma mais simples de rodar a aplicação (API + SQL Server) é utilizando o Docker. Você não precisa ter o .NET SDK ou SQL Server instalados na sua máquina.
+
 Pré-requisitos
-.NET SDK 9.0
-
-SQL Server (Express, Developer ou Docker)
+Docker Desktop instalado e rodando.
 
 Passo a Passo
 Clone o repositório:
@@ -51,43 +57,34 @@ Bash
 
 git clone https://github.com/JulioNogueira99/NexusPDV.git
 cd NexusPDV
-Configure o Banco de Dados: No arquivo NexusPDV.API/appsettings.json, ajuste a ConnectionString para o seu SQL Server local:
-
-JSON
-
-"ConnectionStrings": {
-  "DefaultConnection": "Server=.;Database=NexusPDV;Trusted_Connection=True;TrustServerCertificate=True;"
-}
-Execute as Migrations: Abra o terminal na raiz e execute:
+Suba o ambiente: Execute o comando abaixo na raiz do projeto. Ele irá compilar a API, baixar o SQL Server e configurar a rede.
 
 Bash
 
-dotnet ef database update -p NexusPDV.Infrastructure -s NexusPDV.API
-Popule o Banco (Seed Inicial): Como a API foca no processo de Venda, execute este script no seu SQL Server para criar os dados base (Cliente e Produtos):
+docker compose up --build
+Acesse: Abra o navegador em: http://localhost:8080/swagger
 
-SQL
+Nota: Na primeira execução, o SQL Server pode demorar alguns segundos para iniciar. Se a API falhar ao conectar, ela tentará reiniciar automaticamente até conseguir.
 
-INSERT INTO Customers (Name, Email, Cpf, CreatedAt) VALUES ('Visitante', 'teste@nexus.com', '11122233344', GETDATE());
-INSERT INTO Products (Title, Price, StockQuantity, CreatedAt) VALUES ('Notebook Gamer', 5000.00, 10, GETDATE());
-INSERT INTO Products (Title, Price, StockQuantity, CreatedAt) VALUES ('Mouse Sem Fio', 50.00, 5, GETDATE());
-Execute a API:
+🔐 Como Acessar (Autenticação)
+Como o sistema possui segurança JWT, o fluxo de uso no Swagger segue a ordem abaixo:
 
-Bash
+Crie seu Usuário: Vá no endpoint POST /api/Auth/register e crie um login.
 
-dotnet run --project NexusPDV.API
-Acesse o Swagger em: https://localhost:7193/swagger (ou a porta indicada no terminal).
+Faça Login: Vá no endpoint POST /api/Auth/login com os dados criados. Copie o token gerado na resposta.
 
-🧪 Rodando os Testes
-O projeto conta com testes unitários cobrindo o Caso de Uso de Vendas, validando cenários de sucesso e falha (ex: estoque insuficiente).
+Autentique-se no Swagger: Clique no botão Authorize 🔓 (cadeado) no topo da página. Digite: Bearer SEU_TOKEN_AQUI e clique em Login.
 
-Para rodar os testes:
+Use a API: Agora você pode acessar as rotas protegidas (como criar vendas).
 
-Bash
-
-dotnet test
 🔌 Endpoints Principais
-Orders
-POST /api/Orders - Realiza uma nova venda (baixa estoque automaticamente).
+🛡️ Auth (Autenticação)
+POST /api/Auth/register - Cria um novo usuário no sistema.
+
+POST /api/Auth/login - Retorna o Token JWT de acesso.
+
+🛒 Orders (Vendas)
+POST /api/Orders - [Requer Auth] Realiza uma nova venda e baixa estoque.
 
 Body Exemplo:
 
@@ -101,6 +98,12 @@ JSON
 }
 GET /api/Orders/{id} - Consulta um pedido e seus itens.
 
+🧪 Rodando os Testes (Opcional)
+Se você tiver o .NET SDK instalado e quiser rodar os testes unitários da aplicação:
+
+Bash
+
+dotnet test
 🤝 Contribuição
 Contribuições são bem-vindas! Sinta-se à vontade para abrir Issues ou Pull Requests.
 
