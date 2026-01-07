@@ -4,9 +4,11 @@ using NexusPDV.Application.Services;
 using System;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NexusPDV.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
