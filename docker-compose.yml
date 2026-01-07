@@ -1,0 +1,34 @@
+services:
+  # Serviço 1: Banco de Dados SQL Server
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: nexus-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password123!
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  # Serviço 2: API NexusPDV
+  api:
+    image: nexus-api
+    container_name: nexus-api
+    build:
+      context: .
+      dockerfile: NexusPDV.API/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=NexusPDV;User Id=sa;Password=Password123!;TrustServerCertificate=True;
+      - Jwt__Key=b1NqZk9WZ3ZkY2xwZ3hNQ3R3S0R4V1R2Z0p5Q2FZcE5tM0p6Z1F1aW1ZUw==
+      - Jwt__Issuer=NexusPDV
+      - Jwt__Audience=NexusPDV
+    depends_on:
+      - sqlserver
+    restart: on-failure
+
+volumes:
+  sql_data:
