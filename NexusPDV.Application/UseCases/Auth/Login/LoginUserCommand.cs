@@ -1,13 +1,14 @@
-﻿using System;
+﻿using MediatR;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NexusPDV.Application.InputModels
+namespace NexusPDV.Application.UseCases.Auth.Login
 {
-    public class LoginInputModel
+    public class LoginUserCommand : IRequest<LoginUserResponse>
     {
         [Required(ErrorMessage = "O Email é obrigatório")]
         [EmailAddress(ErrorMessage = "Formato de email inválido")]

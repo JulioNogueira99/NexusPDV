@@ -6,10 +6,20 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.0" />
+    <PackageReference Include="MediatR" Version="14.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.11" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.11" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.15.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="UseCases\Customer\Add\" />
+    <Folder Include="UseCases\Customer\GetById\" />
+    <Folder Include="UseCases\Customer\Update\" />
+    <Folder Include="UseCases\Product\Add\" />
+    <Folder Include="UseCases\Product\GetById\" />
+    <Folder Include="UseCases\Product\Update\" />
   </ItemGroup>
 
   <PropertyGroup>

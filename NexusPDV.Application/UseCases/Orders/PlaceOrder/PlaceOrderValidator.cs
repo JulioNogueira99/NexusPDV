@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
-using NexusPDV.Application.InputModels;
 
-namespace NexusPDV.Application.Validators
+namespace NexusPDV.Application.UseCases.Orders.PlaceOrder
 {
-    public class PlaceOrderValidator : AbstractValidator<PlaceOrderInputModel>
+    public class PlaceOrderValidator : AbstractValidator<PlaceOrderCommand>
     {
         public PlaceOrderValidator()
         {
@@ -19,7 +18,7 @@ namespace NexusPDV.Application.Validators
         }
     }
 
-    public class OrderItemValidator : AbstractValidator<OrderItemInputModel>
+    public class OrderItemValidator : AbstractValidator<OrderItemInput>
     {
         public OrderItemValidator()
         {

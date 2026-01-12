@@ -5,6 +5,9 @@ using System;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
+using MediatR;
+using NexusPDV.Application.UseCases.Orders.PlaceOrder;
+using NexusPDV.Application.UseCases.Orders.GetById;
 
 namespace NexusPDV.API.Controllers
 {
@@ -15,53 +18,50 @@ namespace NexusPDV.API.Controllers
     {
         private readonly IOrderService _service;
         private readonly IValidator<PlaceOrderInputModel> _validator;
+        private readonly IMediator _mediator;
 
-        public OrdersController(IOrderService service, IValidator<PlaceOrderInputModel> validator)
+        public OrdersController(IOrderService service, IValidator<PlaceOrderInputModel> validator, IMediator mediator)
         {
             _service = service;
             _validator = validator;
+            _mediator = mediator;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(PlaceOrderInputModel input)
+        public async Task<IActionResult> Post([FromBody] PlaceOrderCommand command)
         {
-            var validationResult = await _validator.ValidateAsync(input);
-            if (!validationResult.IsValid)
-            {
-                return BadRequest(new { errors = validationResult.Errors });
-            }
-
             try
-            { 
-                var order = await _service.PlaceOrder(input);
+            {
+                var response = await _mediator.Send(command);
 
-                return CreatedAtAction(nameof(Post), new { id = order.OrderId }, order);
+                return CreatedAtAction(nameof(GetById), new { id = response.OrderId }, response);
+            }
+            catch (ValidationException ex)
+            {
+                var errors = ex.Errors.Select(e => new { Field = e.PropertyName, Error = e.ErrorMessage });
+                return BadRequest(new { message = "Erro de validação", errors });
             }
             catch (ArgumentException ex)
             {
                 return BadRequest(new { message = ex.Message });
             }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
             catch (Exception ex)
             {
-                return StatusCode(500, new { message = "Ocorreu um erro interno: " + ex.Message });
+                return StatusCode(500, new { message = "Erro interno", details = ex.Message });
             }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var order = await _service.GetById(id);
+            var response = await _mediator.Send(new GetOrderByIdQuery(id));
 
-            if (order == null)
+            if (response == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Pedido não encontrado." });
             }
 
-            return Ok(order);
+            return Ok(response);
         }
     }
 }

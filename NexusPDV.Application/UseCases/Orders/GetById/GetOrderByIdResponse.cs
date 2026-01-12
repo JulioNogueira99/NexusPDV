@@ -1,18 +1,21 @@
 ﻿using System;
-using System.Collections.Generic; // Adicione
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace NexusPDV.Application.ViewModels
+namespace NexusPDV.Application.UseCases.Orders.GetById
 {
-    public class OrderViewModel
+    public class GetOrderByIdResponse
     {
         public int OrderId { get; set; }
         public decimal TotalAmount { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Status { get; set; }
-        public List<OrderItemViewModel> Items { get; set; } // Nova Propriedade
+        public List<OrderItemResponse> Items { get; set; }
     }
 
-    public class OrderItemViewModel
+    public class OrderItemResponse
     {
         public string ProductName { get; set; }
         public int Quantity { get; set; }

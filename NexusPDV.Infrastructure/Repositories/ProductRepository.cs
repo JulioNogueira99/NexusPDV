@@ -15,6 +15,11 @@ namespace NexusPDV.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task AddAsync(Product product)
+        {
+            await _context.Products.AddAsync(product);
+        }
+
         public async Task<Product> GetByIdAsync(int id)
         {
             return await _context.Products.FindAsync(id);

@@ -1,13 +1,15 @@
-﻿using System;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NexusPDV.Application.InputModels
+namespace NexusPDV.Application.UseCases.Auth.Register
 {
-    public class RegisterUserInputModel
+    public class RegisterUserCommand : IRequest<bool>
     {
         [Required(ErrorMessage = "O Email é obrigatório")]
         [EmailAddress(ErrorMessage = "Formato de email inválido")]

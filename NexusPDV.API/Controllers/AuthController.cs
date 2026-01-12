@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using NexusPDV.Application.InputModels;
-using NexusPDV.Application.Services;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using NexusPDV.Application.UseCases.Auth.Login;
+using NexusPDV.Application.UseCases.Auth.Register;
 
 namespace NexusPDV.API.Controllers
 {
@@ -8,17 +9,17 @@ namespace NexusPDV.API.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly IMediator _mediator;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IMediator mediator)
         {
-            _authService = authService;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterUserInputModel model)
+        public async Task<IActionResult> Register(RegisterUserCommand command)
         {
-            var result = await _authService.Register(model);
+            var result = await _mediator.Send(command);
 
             if (result)
             {
@@ -29,9 +30,9 @@ namespace NexusPDV.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginInputModel model)
+        public async Task<IActionResult> Login(LoginUserCommand command)
         {
-            var loginResult = await _authService.Login(model);
+            var loginResult = await _mediator.Send(command);
 
             if (loginResult == null)
             {

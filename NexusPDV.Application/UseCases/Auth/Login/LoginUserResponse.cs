@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NexusPDV.Application.ViewModels
+namespace NexusPDV.Application.UseCases.Auth.Login
 {
-    public class LoginViewModel
+    public class LoginUserResponse
     {
         public string Token { get; set; }
         public DateTime Expiration { get; set; }

@@ -4,8 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NexusPDV.API.Controllers;
-using NexusPDV.Application.Services;
-using NexusPDV.Application.Validators;
+using NexusPDV.Application.Behaviors;
+using NexusPDV.Application.UseCases.Auth.Login;
+using NexusPDV.Application.UseCases.Auth.Register;
+using NexusPDV.Application.UseCases.Auth.Utils;
+using NexusPDV.Application.UseCases.Orders.GetById;
+using NexusPDV.Application.UseCases.Orders.PlaceOrder;
 using NexusPDV.Domain.Interfaces;
 using NexusPDV.Infrastructure.Context;
 using NexusPDV.Infrastructure.Repositories;
@@ -29,6 +33,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
+
 .AddJwtBearer(options =>
 {
     options.RequireHttpsMetadata = false; // Em prod deve ser true
@@ -47,10 +52,17 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+
+builder.Services.AddScoped<JwtTokenGenerator>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<PlaceOrderValidator>();
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssemblies(typeof(PlaceOrderHandler).Assembly);
+
+    cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+});
 
 builder.Services.AddControllers();
 
