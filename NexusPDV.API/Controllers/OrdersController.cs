@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NexusPDV.Application.InputModels;
-using NexusPDV.Application.Services;
 using System;
 using System.Threading.Tasks;
 using FluentValidation;
@@ -16,14 +14,10 @@ namespace NexusPDV.API.Controllers
     [Route("api/[controller]")]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderService _service;
-        private readonly IValidator<PlaceOrderInputModel> _validator;
         private readonly IMediator _mediator;
 
-        public OrdersController(IOrderService service, IValidator<PlaceOrderInputModel> validator, IMediator mediator)
+        public OrdersController(IMediator mediator)
         {
-            _service = service;
-            _validator = validator;
             _mediator = mediator;
         }
 

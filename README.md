@@ -22,18 +22,24 @@ Utiliza o padrão **Unit of Work** para assegurar que um Pedido só seja gerado 
 * **Container:** Docker & Docker Compose
 * **Security:** JWT (JSON Web Tokens) & ASP.NET Core Identity
 * **ORM:** Entity Framework Core (SQL Server)
-* **Architecture:** Clean Architecture (Domain, Application, Infrastructure, API)
-* **Design Patterns:** Repository Pattern, Unit of Work, Domain-Driven Design (DDD).
-* **Validation:** FluentValidation
+* **Architecture:** Vertical Slice Architecture & Clean Architecture
+* **Design Patterns:** CQRS, Mediator Pattern, Unit of Work, Domain-Driven Design (DDD).
+* **Libraries:** MediatR(Orchestration), FluentValidation (Pipeline Behavior).
 * **Testing:** xUnit + Moq (Unit Testing)
 * **Documentation:** Swagger UI (Swashbuckle)
 
 ## 🏗️ Arquitetura
 
-O projeto segue estritamente a **Clean Architecture** para garantir testabilidade e manutenção:
+O projeto foi refatorado para utilizar **Vertical Slice Architecture** com **CQRS**, visando alta coesão e baixo acoplamento. As funcionalidades são isoladas em Features autocontidas, substituindo a camada tradicional de Services por Handlers orquestrados via MediatR.
 
-NexusPDV ├── 📂 NexusPDV.Domain # Entidades, Enums, Interfaces (O Coração / Puro C#) ├── 📂 NexusPDV.Application # Casos de Uso (Services), DTOs, Validações, Auth Logic ├── 📂 NexusPDV.Infrastructure # Banco de Dados (EF Core), Identity, Repositórios └── 📂 NexusPDV.API # Controllers, Configurações JWT, Swagger, Dockerfile
-
+NexusPDV
+├── 📂 NexusPDV.Domain           # Entidades, Enums, Interfaces (Núcleo puro)
+├── 📂 NexusPDV.Application      # A Camada de Use Cases (Coração da mudança)
+│   ├── 📂 UseCases              # Organizado por Features (ex: Auth, Orders)
+│   │   └── 📂 PlaceOrder        # Contém: Command, Handler, Validator e Response juntos
+│   └── 📂 Behaviors             # Pipelines do MediatR (ex: ValidationBehavior)
+├── 📂 NexusPDV.Infrastructure   # Banco de Dados (EF Core), Identity, Implementações
+└── 📂 NexusPDV.API              # Controllers (Thin Controllers), Configurações, Dockerfile
 
 ### Destaques Técnicos
 
