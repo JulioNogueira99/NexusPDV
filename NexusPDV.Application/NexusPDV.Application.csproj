@@ -17,7 +17,6 @@
     <Folder Include="UseCases\Customer\Add\" />
     <Folder Include="UseCases\Customer\GetById\" />
     <Folder Include="UseCases\Customer\Update\" />
-    <Folder Include="UseCases\Product\Add\" />
     <Folder Include="UseCases\Product\GetById\" />
     <Folder Include="UseCases\Product\Update\" />
   </ItemGroup>
