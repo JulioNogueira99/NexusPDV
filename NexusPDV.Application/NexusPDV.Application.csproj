@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <Compile Remove="UseCases\Product\GetById\GetProductByIdCommand.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\NexusPDV.Domain\NexusPDV.Domain.csproj" />
   </ItemGroup>
 
@@ -17,7 +21,6 @@
     <Folder Include="UseCases\Customer\Add\" />
     <Folder Include="UseCases\Customer\GetById\" />
     <Folder Include="UseCases\Customer\Update\" />
-    <Folder Include="UseCases\Product\GetById\" />
     <Folder Include="UseCases\Product\Update\" />
   </ItemGroup>
 

@@ -25,6 +25,11 @@ namespace NexusPDV.Infrastructure.Repositories
             return await _context.Products.FindAsync(id);
         }
 
+        public async Task<IEnumerable<Product>> GetAllAsync()
+        {
+            return await _context.Products.ToListAsync();
+        }
+
         public void Update(Product product)
         {
             _context.Products.Update(product);

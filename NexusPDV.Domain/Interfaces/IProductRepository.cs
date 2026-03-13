@@ -7,6 +7,7 @@ namespace NexusPDV.Domain.Interfaces
     {
         Task AddAsync(Product product);
         Task<Product> GetByIdAsync(int id);
+        Task<IEnumerable<Product>> GetAllAsync();
 
         void Update(Product product);
     }
